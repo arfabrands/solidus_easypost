@@ -42,7 +42,11 @@ module SolidusEasypost
           sr.id == selected_easy_post_rate_id
         end
 
-        easypost_shipment.buy(rate)
+        begin 
+          easypost_shipment.buy(rate)
+        rescue => e
+          # Send to Sentry
+        end
         self.tracking = easypost_shipment.tracking_code
       end
 
