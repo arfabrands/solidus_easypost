@@ -2,7 +2,7 @@
 
 require 'forwardable'
 
-module SpreeEaspost
+module SpreeEasypost
   class ReturnAuthorization
     extend Forwardable
 
@@ -15,7 +15,7 @@ module SpreeEaspost
     end
 
     def easypost_shipment
-      @ep_shipment ||= ::EasyPost::Shipment.create(
+      @ep_shipment ||= :EasyPost::Shipment.create(
         from_address: stock_location.easypost_address,
         to_address: order.ship_address.easypost_address,
         parcel: build_parcel,
