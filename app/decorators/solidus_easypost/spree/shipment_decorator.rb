@@ -49,7 +49,7 @@ module SolidusEasypost
         end
         self.tracking     = easypost_shipment.tracking_code
         self.label        = easypost_shipment.postage_label.label_url
-        self.tracking_url = easypost_shipment.tracker.public_url
+        self.easypost_tracking_url = easypost_shipment.tracker.public_url
       end
 
       ::Spree::Shipment.prepend self
