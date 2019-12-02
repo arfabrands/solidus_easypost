@@ -21,6 +21,14 @@ module SolidusEasypost
           shipping_rates << spree_rate if spree_rate.shipping_method.available_to_users?
         end
 
+        if package.order.eligible_for_free_shipping?
+          shipping_rates << ::Spree::ShippingRate.new(
+            name: "Free Shipping",
+            cost: 0,
+            shipping_method: find_or_create_free_shipping_method
+          )
+        end
+
         # Sets cheapest rate to be selected by default
         if shipping_rates.any?
           shipping_rates.min_by(&:cost).selected = true
@@ -43,6 +51,17 @@ module SolidusEasypost
         r.name = method_name
         r.available_to_users = true
         r.code = rate.service
+        r.calculator = ::Spree::Calculator::Shipping::FlatRate.create
+        r.shipping_categories = [::Spree::ShippingCategory.first]
+      end
+    end
+
+    def find_or_create_free_shipping_method
+      method_name = "free_shipping"
+      ::Spree::ShippingMethod.find_or_create_by(admin_name: method_name) do |r|
+        r.name = method_name
+        r.available_to_users = true
+        r.code = 'free_shipping'
         r.calculator = ::Spree::Calculator::Shipping::FlatRate.create
         r.shipping_categories = [::Spree::ShippingCategory.first]
       end
