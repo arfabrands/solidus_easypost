@@ -15,3 +15,5 @@ else
 end
 
 gemspec
+
+gem "byebug", "~> 11.0", :groups => [:development, :test]

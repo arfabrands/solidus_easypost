@@ -24,6 +24,17 @@ This goes into a new file called `config/initializers/easy_post.rb`:
   EasyPost.api_key = 'YOUR_API_KEY_HERE'
 ```
 
+## Testing
+
+Create a test app:
+```
+bundle exec rake test_app
+```
+
+Run the suite:
+```
+bundle exec rspec
+```
 
 ## Usage
 
