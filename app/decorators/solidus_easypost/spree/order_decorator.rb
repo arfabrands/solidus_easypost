@@ -13,6 +13,11 @@ module SolidusEasypost
         ENV.fetch('FREE_SHIPPING_THRESHOLD', 1000000)
       end
 
+      # Implement app-specific logic to defeat live rates in host app
+      def fetch_live_shipping_rates?
+        true
+      end
+
       ::Spree::Order.prepend self
     end
   end

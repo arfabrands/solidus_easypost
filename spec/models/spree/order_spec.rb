@@ -15,6 +15,10 @@ module Spree
           expect(order.eligible_for_free_shipping?).to be true
         end
       end
+
+      it "knows when to use static over live rates" do
+        expect(order.fetch_live_shipping_rates?).to be true
+      end
     end
   end
 end

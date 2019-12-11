@@ -58,9 +58,26 @@ RSpec.describe Spree::Stock::Estimator, :vcr do
       end
     end
 
+    context 'static rates should be used' do
+      it 'returns flat rate shipping by default' do
+        allow(package.order).to receive(:fetch_live_shipping_rates?) { false }
+        expect(subject.count).to eq 1 
+        expect(subject.first.cost).to eq 5
+        expect(subject.first.name).to eq "Standard shipping"
+      end
+
+      it 'returns free flat rate shipping for qualifying offers' do
+        allow(package.order).to receive(:fetch_live_shipping_rates?) { false }
+        allow(package.order).to receive(:eligible_for_free_shipping?) { true }
+        expect(subject.count).to eq 1 
+        expect(subject.first.cost).to eq 0
+        expect(subject.first.name).to eq "Free shipping"
+      end
+    end
+
     context 'no rates are found' do
       let(:package) do
-        instance_double(Spree::Stock::Package, easypost_shipment: fake_shipment)
+        instance_double(Spree::Stock::Package, easypost_shipment: fake_shipment, order: shipment.order)
       end
 
       let(:fake_shipment) do
