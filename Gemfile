@@ -16,4 +16,8 @@ end
 
 gemspec
 
-gem "byebug", "~> 11.0", :groups => [:development, :test]
+
+group :test, :development do
+  gem "byebug", "~> 11.0"
+  gem 'climate_control'
+end

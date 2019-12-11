@@ -10,9 +10,10 @@ module Spree
       end
       
       it "should not qualify for free shipping if total exceeds shipping threshold" do
-        allow(ENV).to receive(:[]).with('FREE_SHIPPING_THRESHOLD').and_return(25)
-        order.total = 25
-        expect(order.eligible_for_free_shipping?).to be true
+        ClimateControl.modify FREE_SHIPPING_THRESHOLD: '25' do
+          order.total = 25
+          expect(order.eligible_for_free_shipping?).to be true
+        end
       end
     end
   end
