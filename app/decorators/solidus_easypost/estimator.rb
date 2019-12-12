@@ -14,6 +14,7 @@ module SolidusEasypost
     def live_shipping_rates(package, _frontend_only = true)
       shipment = package.easypost_shipment
       rates = shipment.rates.sort_by { |r| r.rate.to_i }
+      available_to_users = package.order.channel != 'spree'
 
       shipping_rates = []
 
@@ -24,7 +25,7 @@ module SolidusEasypost
             cost: rate.rate,
             easy_post_shipment_id: rate.shipment_id,
             easy_post_rate_id: rate.id,
-            shipping_method: find_or_create_shipping_method(rate)
+            shipping_method: find_or_create_shipping_method(rate, available_to_users)
           )
 
           shipping_rates << spree_rate if spree_rate.shipping_method.available_to_users?
@@ -65,11 +66,11 @@ module SolidusEasypost
     # Cartons require shipping methods to be present, This will lookup a
     # Shipping method based on the admin(internal)_name. This is not user facing
     # and should not be changed in the admin.
-    def find_or_create_shipping_method(rate)
+    def find_or_create_shipping_method(rate, available_to_users)
       method_name = "#{rate.carrier} #{rate.service}"
       ::Spree::ShippingMethod.find_or_create_by(admin_name: method_name) do |r|
         r.name = method_name
-        r.available_to_users = false
+        r.available_to_users = available_to_users
         r.code = rate.service
         r.calculator = ::Spree::Calculator::Shipping::FlatRate.create
         r.shipping_categories = [::Spree::ShippingCategory.first]
