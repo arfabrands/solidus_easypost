@@ -6,7 +6,7 @@ module SolidusEasypost
 
       # To implement in host app
       def eligible_for_free_shipping?
-        total >= free_shipping_threshold.to_i
+        item_total >= free_shipping_threshold.to_i
       end
 
       def free_shipping_threshold

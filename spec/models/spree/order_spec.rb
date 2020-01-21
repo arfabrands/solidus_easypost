@@ -5,13 +5,13 @@ module Spree
     context "free shipping" do
       let(:order) { Spree::Order.create }
       it "should not qualify for free shipping by default" do
-        order.total = 20
+        order.item_total = 20
         expect(order.eligible_for_free_shipping?).to be false
       end
-      
+
       it "should not qualify for free shipping if total exceeds shipping threshold" do
         ClimateControl.modify FREE_SHIPPING_THRESHOLD: '25' do
-          order.total = 25
+          order.item_total = 25
           expect(order.eligible_for_free_shipping?).to be true
         end
       end

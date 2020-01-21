@@ -4,7 +4,7 @@ module SolidusEasypost
   class Estimator
 
     def shipping_rates(package, _frontend_only = true)
-      if package.order.fetch_live_shipping_rates? 
+      if package.order.fetch_live_shipping_rates?
         live_shipping_rates(package, _frontend_only = true)
       else
         static_shipping_rates(package)
@@ -44,7 +44,6 @@ module SolidusEasypost
 
     def static_shipping_rates(package)
       shipping_rates = []
-
 
       method_name = static_shipping_method_name(package)
       shipping_rates << ::Spree::ShippingRate.new(
@@ -90,7 +89,7 @@ module SolidusEasypost
     def static_shipping_method_name(package)
       package.order.eligible_for_free_shipping? ? "free_shipping" : "standard_shipping"
     end
-    
+
     def flat_rate_cost(package)
       if package.order.eligible_for_free_shipping?
         0.0
